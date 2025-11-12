@@ -1,4 +1,4 @@
-package org.example.spring_jwt_learning;
+package org.example.spring_jwt_learning.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
