@@ -10,20 +10,18 @@ import javax.swing.text.html.parser.Entity;
 
 
 @Repository
-public class JDBC_Repository {
+public  class JDBC_Repository implements RepositoryInterface {
     @Autowired
    private JdbcTemplate JT;
 
 
-
-
+    @Override
    public int add(UserEntity user)
    {
        String sql = "INSERT INTO JWT_user (username,role,PASSWORD) VALUES (?,?,?)";
-       int number = JT.update(sql, user.getUsername(), user.getRole(), user.getPassword());
-       return  number;
-   }
+       return JT.update(sql, user.getName(), user.getRole(), user.getPassword());
 
+   }
 
 
 
