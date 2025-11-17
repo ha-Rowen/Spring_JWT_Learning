@@ -25,10 +25,11 @@ class SpringJwtLearningApplicationTests {
    static void UserEntity()
     {
         RS =new RandomString(9);
-        user=new UserEntity();
-        user.setUsername(RS.RandomString());
-        user.setPassword(RS.RandomString());
-        user.setRole("user");
+        user= UserEntity.builder()
+                .name(RS.RandomString())
+                .password(RS.RandomString())
+                .role("user")
+                .build();
 
     }
 

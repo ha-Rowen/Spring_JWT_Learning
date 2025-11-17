@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @ResponseBody
-public class AdminController {
+public class AdminController { // 메니저전공 컨트롤러
 
     @GetMapping("/admin")
     public String adminp()

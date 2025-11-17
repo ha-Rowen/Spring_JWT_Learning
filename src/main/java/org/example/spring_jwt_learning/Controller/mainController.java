@@ -1,5 +1,6 @@
 package org.example.spring_jwt_learning.Controller;
 
+import org.apache.coyote.Response;
 import org.example.spring_jwt_learning.JoinDTO.UserJoinDTO;
 import org.example.spring_jwt_learning.Service.JoinService;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,9 @@ public class mainController {
     }
 
     @GetMapping("/")
-    public String mainp()
+    public ResponseEntity<String> MainPage()
     {
-        return "main Controller";
+        return new ResponseEntity<>(HttpStatus.OK); // 메인페이지 test용이다.
     }
 
     @PostMapping("/Join")
@@ -35,6 +36,16 @@ public class mainController {
             return new ResponseEntity<>(HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        // 현재는 그냥 성공이라고 전공한다. Repository에서 add 기능을 수행하고 결과를 바탕으로 성공여부를 출력해야 한다.
+        // retository에 결과를 바탕으로 저장 여부를 파악한뒤 그 결과코드를 프론트에게 전송한다.
     }
+
+    @PostMapping("login")
+    public ResponseEntity<String> Login(@ModelAttribute UserJoinDTO userJoin)
+    {
+
+        return new ResponseEntity<>(HttpStatus.OK);
+        // 로그인 로직 만들어야한다.
+    }
+
+
 }
