@@ -10,10 +10,9 @@ import javax.swing.text.html.parser.Entity;
 
 
 @Repository
-public  class JDBC_Repository implements RepositoryInterface {
+public  class JDBC_Repository implements RepositoryInterface{
     @Autowired
    private JdbcTemplate JT;
-
 
     @Override
    public int add(UserEntity user)

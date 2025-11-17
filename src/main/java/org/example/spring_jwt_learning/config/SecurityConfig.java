@@ -47,8 +47,9 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/", "/join").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
-       // http
-           //     .addFilterAt(new JWT(), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .addFilterAt(new JWT(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http

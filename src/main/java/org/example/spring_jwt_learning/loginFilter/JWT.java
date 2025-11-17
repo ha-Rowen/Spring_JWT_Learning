@@ -29,6 +29,7 @@ public class JWT extends UsernamePasswordAuthenticationFilter
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
+
         UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(UPAT);
 
