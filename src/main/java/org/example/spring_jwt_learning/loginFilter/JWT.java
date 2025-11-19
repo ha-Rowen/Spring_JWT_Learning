@@ -29,6 +29,7 @@ public class JWT extends UsernamePasswordAuthenticationFilter
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
+        System.out.println(username);
 
         UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(UPAT);
@@ -36,12 +37,12 @@ public class JWT extends UsernamePasswordAuthenticationFilter
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    public void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         super.unsuccessfulAuthentication(request, response, failed);
     }
 }

@@ -1,7 +1,6 @@
 package org.example.spring_jwt_learning.Service;
 
 import org.example.spring_jwt_learning.Entity.UserEntity;
-import org.example.spring_jwt_learning.JDBC.JDBC_Repository;
 import org.example.spring_jwt_learning.JDBC.RepositoryInterface;
 import org.example.spring_jwt_learning.JoinDTO.UserJoinDTO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
