@@ -15,6 +15,11 @@ import java.io.IOException;
 
 public class JWT extends UsernamePasswordAuthenticationFilter
 {
+
+    /*기본에 있던 Springboot security에서 필터 체인이라는 부분이 있다.
+    * 거기에 존재하는 UsernamePasswordAuthenticationFilter를 상속받아서 커스텀하는 방법이다.
+    * JWT방식을 사용하기 위한 방법이다.  */
+
     private final AuthenticationManager authenticationManager;
 
     public JWT(AuthenticationManager authenticationManager)
@@ -29,10 +34,16 @@ public class JWT extends UsernamePasswordAuthenticationFilter
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
-        System.out.println(username);
-
         UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(UPAT);
+
+        /* 여기가 핵심적인 부분이라고 말할 수 있다.
+         * 로그인 요청이 들어오면 서블릿이 username, password를 받아서 처리해준다.
+         * UsernamePasswordAuthenticationToken 에서는 인증되지않는 사용자를 위해서 인증 토큰을 생성하고
+         * authenticationManager에게 실제 인증 처리를 위임한다.
+         * authenticationManager는  UserDetailsService와 PasswordEncoder를 통해
+         * 사용자 정보 조회 및 비밀번호 검증을 수행한다.
+         */
 
     }
 
