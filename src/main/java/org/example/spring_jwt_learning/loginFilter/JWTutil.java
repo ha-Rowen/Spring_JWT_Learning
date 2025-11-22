@@ -1,11 +1,8 @@
 package org.example.spring_jwt_learning.loginFilter;
 
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.*;
 
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import org.example.spring_jwt_learning.Entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +44,10 @@ public class JWTutil {
     }
 
 
-
+    public Boolean isExpired(String jwt)
+    {
+        return jwtVerification(jwt, Boolean.class,"Exp","JWTutil.class: isExpired 메서드 JWT파싱 검증실패");
+    }
 
 
     public String getRole(String jwt)
@@ -72,13 +72,40 @@ public class JWTutil {
          교훈: 사용해보니까 정말 나쁘지 않다. 앞으로 비슷한게 있으면 적극적으로 만들자*/
 
         try {
-            return Jwts.parser().verifyWith(keys).build().parseSignedClaims(jwt) //말 그대로 파싱과정
-                    .getPayload().get(claimName, ReturnType);
-        } catch (JwtException | IllegalArgumentException e)
+                if(ReturnType== Boolean.class && claimName.equals("Exp")) {
+
+                   return ReturnType.cast(
+                           Jwts
+                                   .parser()
+                                   .verifyWith(keys)
+                                   .build()
+                                   .parseSignedClaims(jwt)
+                                   .getPayload()
+                                   .getExpiration()
+                                   .before(new Date()));
+                }
+                else {
+                    return
+                            Jwts
+                                    .parser()
+                                    .verifyWith(keys)
+                                    .build()
+                                    .parseSignedClaims(jwt) //말 그대로 파싱과정
+                                    .getPayload()
+                                    .get(claimName, ReturnType);
+
+                }
+        }
+        catch (ExpiredJwtException e) {
+            // 만료된 경우 true 반환
+            return ReturnType.cast(true);
+        }
+        catch (JwtException | IllegalArgumentException e)
         {
             throw new RuntimeException(errorMessage,e);
         }
     }
+
    /*{
              "username": "김철수",
              "age": 30,

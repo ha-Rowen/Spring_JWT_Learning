@@ -93,17 +93,27 @@ public class JWTutilTest {
 
     @Test
     @DisplayName("검증로직 TEST")
-    void Verification ()
-    {
+    void Verification () throws InterruptedException {
         // String는 불변객체이다. 따라서 버퍼를 사용해서 메모리 효율을 올리고 싶었지만...
         // 쓰읍... 이게 맞나?? 싶긴하다..
         // 버퍼를 사용하면 가독성이 안좋아지고, 가독성을 포기할 만큼 큰 차이는 없는거 같고....
         // 너무 고민되는 부분이다.
-        String JWT  = jwtUtil.createJwt   (user,1200L);
-        String Role = jwtUtil.getRole    (JWT)                 ;
-        String name = jwtUtil.getUsername(JWT)                 ;
-       assertThat(name).isEqualTo(this.user.getName() )        ;
-       assertThat(Role).isEqualTo(this.role.toString())        ;
+        String JWT         = jwtUtil.createJwt      (user,10000L);
+        String Role        = jwtUtil.getRole        (JWT)                 ;
+        String name        = jwtUtil.getUsername    (JWT)                 ;
+        boolean expiration = jwtUtil.isExpired      (JWT)                 ;
+       assertThat(name)
+               .isEqualTo(this.user.getName() )                  ;
+       assertThat(Role)
+               .isEqualTo(this.role.toString())                  ;
+
+       assertThat(jwtUtil.isExpired(JWT))
+               .isEqualTo(false)                         ;
+
+        Thread.sleep(10000L)                                 ;
+
+       assertThat(jwtUtil.isExpired(JWT))
+               .isEqualTo(true)                         ;
     }
 
 }
