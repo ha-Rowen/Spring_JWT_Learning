@@ -3,6 +3,7 @@ package org.example.spring_jwt_learning.loginFilter;
 import io.jsonwebtoken.Jwt;
 
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
@@ -14,6 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JWTutil {
@@ -36,15 +38,44 @@ public class JWTutil {
         // 0.12.3 버전에는 hmacShaKeyFor를 지원하지 않아서 어쩔 수 없다.
     }
 
-
-
-    public String getUsername(String token)
+    public String getRole(String jwt)
     {
-        return Jwts.parser().verifyWith(keys).build().parseSignedClaims(token) //말 그대로 파싱과정
-                .getPayload().get("username", String.class);
-       // 예외처리를 하는게 좋다고 한다. 예외처리는 자원을 많이 소비하는 걸로 알고 있는데 여기서는 뭐.. 쓰는게 좋아 보이는데...
+        try {
+            return Jwts.parser().verifyWith(keys).build().parseSignedClaims(jwt) //말 그대로 파싱과정
+                    .getPayload().get("Role", List.class ).toString();
+        } catch (JwtException | IllegalArgumentException e)
+        {
+            throw new RuntimeException("JWTutil.class: getRole 메서드 JWT파싱 검증실패",e);
+        }
     }
 
+
+    public String getUsername(String jwt)
+    {
+
+       return jwtVerification (jwt,String.class,"UserName","JWTutil.class: getUsername 메서드 JWT파싱 검증실패");
+
+    }
+
+    private <T> T jwtVerification (String jwt,Class<T> ReturnType, String claimName,String errorMessage  )
+    {
+        try {
+            return Jwts.parser().verifyWith(keys).build().parseSignedClaims(jwt) //말 그대로 파싱과정
+                    .getPayload().get(claimName, ReturnType);
+        } catch (JwtException | IllegalArgumentException e)
+        {
+            throw new RuntimeException(errorMessage,e);
+        }
+    }
+
+
+   /*{
+             "username": "김철수",
+             "age": 30,
+             "isAdmin": true,
+             "roles": ["USER", "ADMIN"],
+             "loginTime": 1234567890
+          } 실제 JWT payload 값이 이렇게 될 수 있으며 key:value로 구성되어 있다.  그러기 때문에 get()을 했을 때 타입이 일정하지 않아서 제네릭을 사용해서 명시한다.  */
 
     public String createJwt(UserEntity user , Long expiredMs)
     {

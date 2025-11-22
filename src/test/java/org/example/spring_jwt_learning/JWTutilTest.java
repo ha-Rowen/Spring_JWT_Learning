@@ -12,6 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.crypto.SecretKey;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -24,14 +27,20 @@ public class JWTutilTest {
     private String    Encodeds    = jwtUtil.GetEncodeds()  ;
     private String    jwtid       = jwtUtil.GetJwtId()     ;
 
+    Set<String> role = new HashSet<>();
 
+    public Set<String> setRole() {
+        role.add("User");
+        role.add("Admin");
+        return role;
+    }
 
     private UserEntity user = UserEntity.builder()
                                  .name("김철수")
-                                    .role("User")
+                                    .role(setRole())
                                         .email("12345798@naver.com")
                                              .password("dfafa")
-                                            .build();
+                                                 .build();
 
     @Test
     @DisplayName("JWT키값 검증")
@@ -72,9 +81,11 @@ public class JWTutilTest {
 
         assertThat(claims.getPayload().getId()).isEqualTo(this.jwtid);
         assertThat(claims.getPayload().get("UserName")).isEqualTo("김철수");
-        assertThat(claims.getPayload().get("Role")).isEqualTo("User");
+        assertThat(claims.getPayload().get("Role").toString()).isEqualTo(this.role.toString());
 
     }
+
+
 }
 
 

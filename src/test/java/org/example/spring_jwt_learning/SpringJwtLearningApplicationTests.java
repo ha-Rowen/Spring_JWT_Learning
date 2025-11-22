@@ -28,7 +28,7 @@ class SpringJwtLearningApplicationTests {
         user= UserEntity.builder()
                 .name(RS.RandomString())
                 .password(RS.RandomString())
-                .role("user")
+             //   .role("user") // DB에 아직 set자료 형으로 받아오는 로직을 수정하지 않았다.
                 .build();
 
     }
