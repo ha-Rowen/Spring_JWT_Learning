@@ -21,9 +21,10 @@ public class JWT extends UsernamePasswordAuthenticationFilter
     * JWT방식을 사용하기 위한 방법이다.  */
 
     private final AuthenticationManager authenticationManager;
-
-    public JWT(AuthenticationManager authenticationManager)
+    private final JWTutil               jwTutil              ;
+    public JWT(AuthenticationManager authenticationManager,JWTutil jwTutil)
     {
+        this.jwTutil=jwTutil;
         this.authenticationManager = authenticationManager;
     }
 
@@ -49,7 +50,11 @@ public class JWT extends UsernamePasswordAuthenticationFilter
 
     @Override
     public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+     /*로그인이 성공했을 때 JWT토큰 발급 진행 */
         super.successfulAuthentication(request, response, chain, authResult);
+
+        Object principal = authResult.getPrincipal();
+
     }
 
     @Override

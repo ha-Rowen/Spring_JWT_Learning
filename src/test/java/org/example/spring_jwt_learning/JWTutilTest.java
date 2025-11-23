@@ -39,7 +39,7 @@ public class JWTutilTest {
 
     private UserEntity user = UserEntity.builder()
                                  .name("김철수")
-                                    .role(setRole()) //role이걸 2번 사용하면 불변으로 값으로 입력되서. 가급적이면 한번에 모아서 넣어라
+                                    .roles(setRole()) //role이걸 2번 사용하면 불변으로 값으로 입력되서. 가급적이면 한번에 모아서 넣어라
                                         .email("12345798@naver.com")
                                              .password("dfafa")
                                                  .build();

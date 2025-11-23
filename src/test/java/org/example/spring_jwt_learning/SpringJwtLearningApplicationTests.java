@@ -2,6 +2,7 @@ package org.example.spring_jwt_learning;
 
 import org.example.spring_jwt_learning.Entity.UserEntity;
 import org.example.spring_jwt_learning.JDBC.JDBC_Repository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,27 +11,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 @SpringBootTest
 class SpringJwtLearningApplicationTests {
 
     @Autowired
-    private        JDBC_Repository     JR;
-    private static UserEntity        user;
-    private static RandomString        RS;
+    private JDBC_Repository JR;
+    private static UserEntity user;
+    private static RandomString RS;
 
-
+    @Autowired
+    private DataSource dataSource;
 
     @BeforeAll
     @DisplayName("User..OK")
-   static void UserEntity()
-    {
-        RS =new RandomString(9);
-        user= UserEntity.builder()
+    static void UserEntity() {
+        RS = new RandomString(9);
+        user = UserEntity.builder()
                 .name(RS.RandomString())
+                .email("test@gmail.com")
                 .password(RS.RandomString())
-             //   .role("user") // DB에 아직 set자료 형으로 받아오는 로직을 수정하지 않았다.
+                .role("user") // DB에 아직 set자료 형으로 받아오는 로직을 수정하지 않았다.
                 .build();
 
+    }
+
+
+    @Test
+    @DisplayName("DB연결 문제없음")
+    void testDatabaseConnection() throws SQLException {
+        // DB 연결 시도
+        try (Connection connection = dataSource.getConnection()) {
+            Assertions.assertNotNull(connection);
+            System.out.println("✅ DB 연결 성공!");
+            System.out.println("DB URL: " + connection.getMetaData().getURL());
+            System.out.println("DB 사용자: " + connection.getMetaData().getUserName());
+        }
     }
 
     @Test

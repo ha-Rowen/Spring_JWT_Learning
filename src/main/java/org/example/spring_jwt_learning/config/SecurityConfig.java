@@ -1,6 +1,7 @@
 package org.example.spring_jwt_learning.config;
 
 import org.example.spring_jwt_learning.loginFilter.JWT;
+import org.example.spring_jwt_learning.loginFilter.JWTutil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthenticationConfiguration  authenticationConfiguration;
+    private final JWTutil                       jwTutil                   ;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTutil jwTutil) {
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwTutil                     = jwTutil                    ;
     }
 
     @Bean
@@ -48,7 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
        http
-               .addFilterAt(new JWT(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+               .addFilterAt(new JWT(authenticationManager(authenticationConfiguration),jwTutil), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http

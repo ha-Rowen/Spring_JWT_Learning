@@ -120,7 +120,7 @@ public class JWTutil {
                 .builder()
                 .id(jwtId)
                 .claim("UserName",user.getName())
-                .claim("Role",user.getRole())
+                .claim("Role",user.getRoles())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(keys)

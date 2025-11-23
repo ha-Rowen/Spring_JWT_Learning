@@ -1,8 +1,8 @@
 package org.example.spring_jwt_learning.Entity;
-
+import lombok.Singular;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
 
 import java.util.Set;
 
@@ -14,7 +14,9 @@ public class UserEntity {
    private String name;
    private String password;
    private String email;
-   private Set<String> role;
+
+   @Singular
+   private Set<String> roles;
 
 
 

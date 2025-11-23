@@ -3,6 +3,7 @@ package org.example.spring_jwt_learning;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.example.spring_jwt_learning.loginFilter.JWT;
+import org.example.spring_jwt_learning.loginFilter.JWTutil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class loginFilterTest {
     @BeforeEach
     void setUp() {
         // JWT 필터에 Mock AuthenticationManager를 주입하여 객체를 생성합니다.
-        jwtfilter = new JWT(authenticationManager);
+        jwtfilter = new JWT(authenticationManager,new JWTutil("vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"));
 
         // 서블릿 Mock 객체를 초기화합니다.
         request = new MockHttpServletRequest();
