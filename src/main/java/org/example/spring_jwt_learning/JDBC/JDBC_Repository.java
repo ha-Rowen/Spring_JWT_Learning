@@ -56,13 +56,13 @@ GROUP BY u.id, u.name, u.email;  */
         }
 
     }
-
+    @Override
     public int getRoleIdByName (String name)
     {
         String sql="SELECT id FROM `roles` WHERE name =?";
         return JT.queryForObject(sql, Integer.class, name);
     }
-
+    @Override
     public void insertUserRole(int userId, int roleId)
     // 원리 try 붙이면서 잘 만들어야 하는데 공부용 예제에 너무 힘쓰는거 같아서 생략...
     {
@@ -71,21 +71,21 @@ GROUP BY u.id, u.name, u.email;  */
         JT.update(sql, userId, roleId, now) ;
     }
 
-
+    @Override
     public int getUserIdJoin(String password)
     {
        String sql="SELECT id FROM `users` WHERE password =?";
         return JT.queryForObject(sql, Integer.class, password);
     }
-
+    @Override
     public boolean userAuthentication (String password,UserEntity user  )
     {
 
         return bp.matches(password,user.getPassword());
 
     }
-
-    public UserEntity getUserEntity (String email,String password)
+    @Override
+    public UserEntity getUserEntity (String email)
     {
         String sql = "SELECT u.id, u.name, u.email,u.password, GROUP_CONCAT(r.name) as roles " +
                 "FROM users u " +
@@ -97,7 +97,7 @@ GROUP BY u.id, u.name, u.email;  */
 
 
         try {
-            UserEntity temuser =JT.queryForObject(sql, (rs, rowNum) -> {
+          return JT.queryForObject(sql, (rs, rowNum) -> {
                 // RowMapper를 사용해서 ResultSet을 UserEntity로 변환
                 UserEntity.UserEntityBuilder builder = UserEntity.builder()
                         .name(rs.getString("name"))
@@ -117,14 +117,6 @@ GROUP BY u.id, u.name, u.email;  */
             }, email);
 
 
-          if(userAuthentication(password,temuser))
-          {
-              return temuser;
-          }else {
-              throw new RuntimeException("올바른 사용자가 아님");
-          }
-
-
         } catch (EmptyResultDataAccessException e) {
             // 데이터가 없을 때 (JOIN 실패 포함)
             System.out.println("User not found with given password");
@@ -137,8 +129,5 @@ GROUP BY u.id, u.name, u.email;  */
     }
 
 
-    @Override
-    public int update(UserEntity user) {
-        return 0;
-    }
+
 }

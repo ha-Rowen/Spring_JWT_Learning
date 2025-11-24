@@ -90,7 +90,7 @@ class SpringJwtLearningApplicationTests {
     @Order(3)
     void userJoin()
     {
-        UserEntity user= JR.getUserEntity(this.user.getEmail(),this.user.getPassword());
+        UserEntity user= JR.getUserEntity(this.user.getEmail());
        assertThat(user.getRoles()).containsExactly("user","admin","moderator");
     }
 
