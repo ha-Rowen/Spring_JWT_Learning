@@ -10,10 +10,17 @@ import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import static org.assertj.core.api.Assertions.assertThat;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class SpringJwtLearningApplicationTests {
@@ -30,13 +37,18 @@ class SpringJwtLearningApplicationTests {
     @DisplayName("User..OK")
     static void UserEntity() {
         RS = new RandomString(9);
+        Set<String> Roles = new HashSet<>();
+        Roles.add("user");
+        Roles.add("admin");
+        Roles.add("moderator");
         user = UserEntity.builder()
                 .name(RS.RandomString())
-                .email("test@gmail.com")
+                .email("test12@gmail.com")// DB에 보조키로 설정되어있어서 항상 다른 값이어야한다.
                 .password(RS.RandomString())
-                .role("user") // DB에 아직 set자료 형으로 받아오는 로직을 수정하지 않았다.
+                .roles(Roles) // DB에 아직 set자료 형으로 받아오는 로직을 수정하지 않았다.
                 .build();
 
+        System.out.println(user.getRoles());
     }
 
 
@@ -46,7 +58,7 @@ class SpringJwtLearningApplicationTests {
         // DB 연결 시도
         try (Connection connection = dataSource.getConnection()) {
             Assertions.assertNotNull(connection);
-            System.out.println("✅ DB 연결 성공!");
+            System.out.println("DB 연결 성공!");
             System.out.println("DB URL: " + connection.getMetaData().getURL());
             System.out.println("DB 사용자: " + connection.getMetaData().getUserName());
         }
@@ -55,7 +67,18 @@ class SpringJwtLearningApplicationTests {
     @Test
     @DisplayName("DB_ADD_TEST")
     void DB_add_TEST() {
-        JR.add(user);
+       // JR.add(user); // test 할때마다 회원이 등록되서 필요할 때, test한다.
     }
+
+    @Test
+    @DisplayName("다중사용자 권한 불러오기")
+    void userJoin()
+    {
+
+        UserEntity user= JR.getUserEntity( UserEntity.builder().password("$2a$12$VJ6G/3e85tNOgFyAvd9TeenVdd1GIEbPh2HkC82bns4NAg7qxr3rW").build());
+       assertThat(user.getRoles()).containsExactly("user","admin","moderator");
+    }
+
+
 
 }

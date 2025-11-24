@@ -36,6 +36,7 @@ public class JWT extends UsernamePasswordAuthenticationFilter
         String password = obtainPassword(request);
 
         UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(username, password);
+        // 사용자 인증정보를 담는 객체
         return authenticationManager.authenticate(UPAT);
 
         /* 여기가 핵심적인 부분이라고 말할 수 있다.
