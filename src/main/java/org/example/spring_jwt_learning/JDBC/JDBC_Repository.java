@@ -78,22 +78,31 @@ GROUP BY u.id, u.name, u.email;  */
         return JT.queryForObject(sql, Integer.class, password);
     }
 
-
-    public UserEntity getUserEntity (UserEntity user)
+    public boolean userAuthentication (String password,UserEntity user  )
     {
-        String sql = "SELECT u.id, u.name, u.email, GROUP_CONCAT(r.name) as roles " +
+
+        return bp.matches(password,user.getPassword());
+
+    }
+
+    public UserEntity getUserEntity (String email,String password)
+    {
+        String sql = "SELECT u.id, u.name, u.email,u.password, GROUP_CONCAT(r.name) as roles " +
                 "FROM users u " +
                 "LEFT JOIN user_roles ur ON u.id = ur.user_id " +
                 "LEFT JOIN roles r ON ur.role_id = r.id " +
-                "WHERE u.password = ? " +
-                "GROUP BY u.id, u.name, u.email";
+                "WHERE u.email = ? " +
+                "GROUP BY u.id, u.name, u.email, u.password";
+
+
 
         try {
-            return JT.queryForObject(sql, (rs, rowNum) -> {
+            UserEntity temuser =JT.queryForObject(sql, (rs, rowNum) -> {
                 // RowMapper를 사용해서 ResultSet을 UserEntity로 변환
                 UserEntity.UserEntityBuilder builder = UserEntity.builder()
                         .name(rs.getString("name"))
-                        .email(rs.getString("email"));
+                        .email(rs.getString("email"))
+                        .password(rs.getString("password"));
 
                 // roles 처리 (GROUP_CONCAT 결과를 Set으로 변환)
                 String rolesString = rs.getString("roles");
@@ -105,7 +114,16 @@ GROUP BY u.id, u.name, u.email;  */
                 }
 
                 return builder.build();
-            }, user.getPassword());
+            }, email);
+
+
+          if(userAuthentication(password,temuser))
+          {
+              return temuser;
+          }else {
+              throw new RuntimeException("올바른 사용자가 아님");
+          }
+
 
         } catch (EmptyResultDataAccessException e) {
             // 데이터가 없을 때 (JOIN 실패 포함)
