@@ -73,7 +73,8 @@ public class JWT extends UsernamePasswordAuthenticationFilter
         }
         String username = user.getUsername();
 
-        jwTutil.createJwt(username,roles,60*60*10L);
+        String token = jwTutil.createJwt(username,roles,60*60*10L);
+        response.addHeader("Authorization", "Bearer " + token);
 
 
     }
