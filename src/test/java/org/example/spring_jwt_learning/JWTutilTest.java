@@ -74,7 +74,7 @@ public class JWTutilTest {
     void Parse()
     {
 
-       String JWT= jwtUtil.createJwt(user,1200L);
+       String JWT= jwtUtil.createJwt(user.getName(),user.getRoles().stream().toList(),10000L);
 
       Jws<Claims> claims = Jwts.parser()
                 .verifyWith(this.keys)
@@ -83,10 +83,12 @@ public class JWTutilTest {
 
         assertThat(claims.getPayload().getId()).isEqualTo(this.jwtid);
         assertThat(claims.getPayload().get("UserName")).isEqualTo("김철수");
-        assertThat(claims.getPayload().get("Role").toString()).isEqualTo(this.role.toString());
+        assertThat(claims.getPayload().get("Role")).isEqualTo(this.role.stream().toList());
         // getPayload().get() <- 이부분에 String.class 안해도 assertThat가 object 타입으로 비교해서 좋았는데.
         // Role부분에서 중첩 권한을 만들어 보니까 어려 문제가 있었다. 그래서 toString으로 할 수 밖에....
         // get("Role",String.class)이렇게 해도 상관없는데, isEqualTo와 보기좋게 통일하고 싶어서 작성했다.
+        // |
+        // |------ 현재 위에 있는 내용과 의견이 좀 달라졌다. Role 값에 Json직렬화 문제가 있을 수 있어서 toStirng은 추천하지 않는다.
 
     }
 
@@ -98,7 +100,7 @@ public class JWTutilTest {
         // 쓰읍... 이게 맞나?? 싶긴하다..
         // 버퍼를 사용하면 가독성이 안좋아지고, 가독성을 포기할 만큼 큰 차이는 없는거 같고....
         // 너무 고민되는 부분이다.
-        String JWT         = jwtUtil.createJwt      (user,10000L);
+        String JWT         = jwtUtil.createJwt      (user.getName(),user.getRoles().stream().toList(),10000L);
         String Role        = jwtUtil.getRole        (JWT)                 ;
         String name        = jwtUtil.getUsername    (JWT)                 ;
         boolean expiration = jwtUtil.isExpired      (JWT)                 ;

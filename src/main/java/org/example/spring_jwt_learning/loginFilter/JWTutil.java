@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 
 
 import io.jsonwebtoken.io.Encoders;
+import org.example.spring_jwt_learning.Entity.UserDetail;
 import org.example.spring_jwt_learning.Entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -114,13 +115,13 @@ public class JWTutil {
              "loginTime": 1234567890
           } 실제 JWT payload 값이 이렇게 될 수 있으며 key:value로 구성되어 있다.  그러기 때문에 get()을 했을 때 타입이 일정하지 않아서 제네릭을 사용해서 명시한다.  */
 
-    public String createJwt(UserEntity user , Long expiredMs)
+    public String createJwt(String username ,List<String> roles, Long expiredMs)
     {
         return Jwts
                 .builder()
                 .id(jwtId)
-                .claim("UserName",user.getName())
-                .claim("Role",user.getRoles())
+                .claim("UserName",username)
+                .claim("Role",roles)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(keys)

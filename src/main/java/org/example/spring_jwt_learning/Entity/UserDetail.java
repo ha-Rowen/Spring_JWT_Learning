@@ -1,6 +1,7 @@
 package org.example.spring_jwt_learning.Entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -17,7 +18,11 @@ public class UserDetail implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> ct = new ArrayList<>();
 
-        ct.add(()->ue.getRoles().toString());
+        for(String role: ue.getRoles())
+        {
+            ct.add(new SimpleGrantedAuthority(role));
+            // simpleGrantedAuthority 스프링에서 제공하는 권한 구현체
+        }
         return ct;
 
     }
