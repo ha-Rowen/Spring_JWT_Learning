@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -75,14 +76,18 @@ class SpringJwtLearningApplicationTests {
     @DisplayName("사용자 password 인증")
     void authentication()
     {
-        String password="744sss5789s1";
+
+        String password="ks18491ec3116";
         UserEntity usertest = UserEntity
                 .builder()
-                .password("$2a$12$ItlkoJjaHjEF3Nz03aXaWOPcChJhuqbRYy0OXkNqjEyPPi6qskfBO")
+                .password("$2a$12$qtr1fcH9u3RASD.Z4Oy2BuwfPJWukxbEis9t.QpDzx6xpfpSZG1Wq")
                 .build();
 
+           assertTrue(JR.userAuthentication(password,usertest));
 
-       assertTrue(JR.userAuthentication(password,usertest));
+
+
+
     }
 
     @Test
@@ -90,8 +95,12 @@ class SpringJwtLearningApplicationTests {
     @Order(3)
     void userJoin()
     {
-        UserEntity user= JR.getUserEntity(this.user.getEmail());
-       assertThat(user.getRoles()).containsExactly("user","admin","moderator");
+        UserEntity user= JR.getUserEntity("jonghak.re@gmail.com");
+       assertThat(user.getRoles()).containsExactly("user");
+       System.out.println(user.getName());
+       System.out.println(user.getPassword());
+
+
     }
 
 

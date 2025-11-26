@@ -27,10 +27,11 @@ public class JdbcJoinService implements JoinService{
 
     @Override
    public int UserJoin(UserJoinDTO userdto) {
+       System.out.println(userdto.getPassword());
         UserEntity userEntity =  UserEntity.builder()
                 .email(userdto.getEmail())
                 .name(userdto.getUsername())
-                .password( BCrypt.encode( userdto.getUsername()))
+                .password( BCrypt.encode(userdto.getPassword()))
                 .roles(Set.of("user")).build(); // DB에서 권한 중첩관련 마이그레이션을 해줘야한다.
         return  JdbcRepository.add(userEntity);
 

@@ -1,5 +1,7 @@
 package org.example.spring_jwt_learning.loginFilter;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -7,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.spring_jwt_learning.Entity.UserDetail;
 import org.example.spring_jwt_learning.Entity.UserEntity;
+import org.example.spring_jwt_learning.JoinDTO.UserJoinDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,20 +40,33 @@ public class JWT extends UsernamePasswordAuthenticationFilter
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+       // String username = obtainUsername(request);
+       // String password = obtainPassword(request);
+            /* name에서 email로 사용자를 찾을 것으로 변경되었다.*/
 
-        UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(username, password);
-        // 사용자 인증정보를 담는 객체
-        return authenticationManager.authenticate(UPAT);
 
-        /* 여기가 핵심적인 부분이라고 말할 수 있다.
-         * 로그인 요청이 들어오면 서블릿이 username, password를 받아서 처리해준다.
-         * UsernamePasswordAuthenticationToken 에서는 인증되지않는 사용자를 위해서 인증 토큰을 생성하고
-         * authenticationManager에게 실제 인증 처리를 위임한다.
-         * authenticationManager는  UserDetailsService와 PasswordEncoder를 통해
-         * 사용자 정보 조회 및 비밀번호 검증을 수행한다.
-         */
+        try {
+
+            ObjectMapper om = new ObjectMapper();
+            UserJoinDTO loginDto =  om.readValue(request.getInputStream(), UserJoinDTO.class);
+            // email을 username으로 사용
+            String email = loginDto.getEmail();     // ← email 추출
+            String password = loginDto.getPassword();
+            UsernamePasswordAuthenticationToken UPAT = new UsernamePasswordAuthenticationToken(email, password);
+            // 사용자 인증정보를 담는 객체
+            return authenticationManager.authenticate(UPAT);
+
+            /* 여기가 핵심적인 부분이라고 말할 수 있다.
+             * 로그인 요청이 들어오면 서블릿이 username, password를 받아서 처리해준다.
+             * UsernamePasswordAuthenticationToken 에서는 인증되지않는 사용자를 위해서 인증 토큰을 생성하고
+             * authenticationManager에게 실제 인증 처리를 위임한다.
+             * authenticationManager는  UserDetailsService와 PasswordEncoder를 통해
+             * 사용자 정보 조회 및 비밀번호 검증을 수행한다.
+             */
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

@@ -40,7 +40,7 @@ public class mainController {
         // retository에 결과를 바탕으로 저장 여부를 파악한뒤 그 결과코드를 프론트에게 전송한다.
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<String> Login(@ModelAttribute UserJoinDTO userJoin)
     {
 

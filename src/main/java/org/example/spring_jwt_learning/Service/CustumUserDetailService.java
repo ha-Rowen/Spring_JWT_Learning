@@ -6,14 +6,17 @@ import org.example.spring_jwt_learning.JDBC.RepositoryInterface;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustumUserDetailService implements UserDetailsService {
-        RepositoryInterface Repository;
-        public CustumUserDetailService(RepositoryInterface Rt)
+        BCryptPasswordEncoder BP        ;
+        RepositoryInterface   Repository;
+        public CustumUserDetailService(RepositoryInterface Rt,BCryptPasswordEncoder BP)
         {
             this.Repository = Rt;
+            this.BP = BP;
         }
 
 
@@ -26,8 +29,9 @@ public class CustumUserDetailService implements UserDetailsService {
         UserEntity user = this.Repository.getUserEntity(email);
 
         if(user !=null)
-         return new UserDetail(user);
+            return new UserDetail(user);
         else
             return null;
+
     }
 }

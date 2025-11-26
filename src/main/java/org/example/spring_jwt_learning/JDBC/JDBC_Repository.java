@@ -31,6 +31,7 @@ GROUP BY u.id, u.name, u.email;  */
     public int add(UserEntity user) {
         int users;
         int userId;
+
         String password =user.getPassword();
         java.sql.Timestamp now = new java.sql.Timestamp(new Date().getTime());
         String sql = "INSERT INTO `users` (name,email,password,created_at,updated_at) VALUES (?,?,?,?,?)";
