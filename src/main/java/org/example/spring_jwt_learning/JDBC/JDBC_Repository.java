@@ -31,7 +31,7 @@ GROUP BY u.id, u.name, u.email;  */
     public int add(UserEntity user) {
         int users;
         int userId;
-        String password = bp.encode(user.getPassword());
+        String password =user.getPassword();
         java.sql.Timestamp now = new java.sql.Timestamp(new Date().getTime());
         String sql = "INSERT INTO `users` (name,email,password,created_at,updated_at) VALUES (?,?,?,?,?)";
         users=JT.update(sql, user.getName(), user.getEmail(), password, now, now) ;
@@ -48,7 +48,7 @@ GROUP BY u.id, u.name, u.email;  */
               .map(this::getRoleIdByName)
                     .forEach(roleId -> insertUserRole(userId, roleId));*/
         /* 내가 스트림 잘못하는거 같네.. 좀 더 공부하거나 연습하자 */
-        if(users==1 && userId==1)
+        if(users==1 && userId>0)
         {
             return 1;
         }else {

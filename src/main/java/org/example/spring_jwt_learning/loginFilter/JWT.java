@@ -81,6 +81,6 @@ public class JWT extends UsernamePasswordAuthenticationFilter
 
     @Override
     public void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        super.unsuccessfulAuthentication(request, response, failed);
+        response.setStatus(401);
     }
 }

@@ -7,7 +7,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 @Service // role관련 중첩 권한 코드를 작성해야한다.
 public class JdbcJoinService implements JoinService{
@@ -26,9 +28,10 @@ public class JdbcJoinService implements JoinService{
     @Override
    public int UserJoin(UserJoinDTO userdto) {
         UserEntity userEntity =  UserEntity.builder()
+                .email(userdto.getEmail())
                 .name(userdto.getUsername())
                 .password( BCrypt.encode( userdto.getUsername()))
-                .role("User").build(); // DB에서 권한 중첩관련 마이그레이션을 해줘야한다.
+                .roles(Set.of("user")).build(); // DB에서 권한 중첩관련 마이그레이션을 해줘야한다.
         return  JdbcRepository.add(userEntity);
 
 
