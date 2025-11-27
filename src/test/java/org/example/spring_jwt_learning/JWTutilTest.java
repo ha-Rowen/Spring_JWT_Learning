@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.crypto.SecretKey;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,7 +102,7 @@ public class JWTutilTest {
         // 버퍼를 사용하면 가독성이 안좋아지고, 가독성을 포기할 만큼 큰 차이는 없는거 같고....
         // 너무 고민되는 부분이다.
         String JWT         = jwtUtil.createJwt      (user.getName(),user.getRoles().stream().toList(),10000L);
-        String Role        = jwtUtil.getRole        (JWT)                 ;
+        List<String> Role        = jwtUtil.getRole        (JWT)                 ;
         String name        = jwtUtil.getUsername    (JWT)                 ;
         boolean expiration = jwtUtil.isExpired      (JWT)                 ;
        assertThat(name)

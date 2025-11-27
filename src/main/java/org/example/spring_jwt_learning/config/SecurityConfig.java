@@ -1,6 +1,7 @@
 package org.example.spring_jwt_learning.config;
 
 import org.example.spring_jwt_learning.loginFilter.JWT;
+import org.example.spring_jwt_learning.loginFilter.JWTFilter;
 import org.example.spring_jwt_learning.loginFilter.JWTutil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,8 +49,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/Join").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/admin").hasAuthority("user")
                         .anyRequest().authenticated());
+        http
+                .addFilterBefore(new JWTFilter(jwTutil), JWT.class);
+
        http
                .addFilterAt(new JWT(authenticationManager(authenticationConfiguration),jwTutil), UsernamePasswordAuthenticationFilter.class);
 

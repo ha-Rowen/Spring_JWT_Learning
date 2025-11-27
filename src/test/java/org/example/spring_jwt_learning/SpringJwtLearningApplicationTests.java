@@ -46,8 +46,8 @@ class SpringJwtLearningApplicationTests {
         Roles.add("moderator");
         user = UserEntity.builder()
                 .name(RS.RandomString())
-                .email("test20@gmail.com")
-                .password("744sss5789s1")
+                .email("hak.re@gmail.com")
+                .password("ks18491ec3116")
                 .roles(Roles)
                 .build();
 
@@ -69,6 +69,8 @@ class SpringJwtLearningApplicationTests {
     @DisplayName("DB_ADD_TEST")
     @Order(2)
     void DB_add_TEST() {
+        user.setPassword(bp.encode("ks18491ec3116"));
+        user.setName("명방이");
         JR.add(user);
     }
 

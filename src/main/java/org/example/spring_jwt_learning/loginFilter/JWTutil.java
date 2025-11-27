@@ -14,6 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class JWTutil {
@@ -51,9 +52,9 @@ public class JWTutil {
     }
 
 
-    public String getRole(String jwt)
+    public List<String> getRole(String jwt)
     {
-       return jwtVerification (jwt,List.class,"Role","JWTutil.class: getRole 메서드 JWT파싱 검증실패").toString();
+       return jwtVerification (jwt,List.class,"Role","JWTutil.class: getRole 메서드 JWT파싱 검증실패");
     }
 
 
@@ -73,6 +74,8 @@ public class JWTutil {
          교훈: 사용해보니까 정말 나쁘지 않다. 앞으로 비슷한게 있으면 적극적으로 만들자*/
 
         try {
+
+
                 if(ReturnType== Boolean.class && claimName.equals("Exp")) {
 
                    return ReturnType.cast(

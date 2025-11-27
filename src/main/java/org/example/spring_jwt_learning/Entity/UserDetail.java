@@ -20,6 +20,7 @@ public class UserDetail implements UserDetails {
 
         for(String role: ue.getRoles())
         {
+
             ct.add(new SimpleGrantedAuthority(role));
             // simpleGrantedAuthority 스프링에서 제공하는 권한 구현체
         }
