@@ -48,11 +48,7 @@ public class mainController {
         // 로그인 로직 만들어야한다.
     }
 
-    @GetMapping("/admin")
-    public String adminp()
-    {
-        return "dmin Controller";
-    }
+
 
 
 }

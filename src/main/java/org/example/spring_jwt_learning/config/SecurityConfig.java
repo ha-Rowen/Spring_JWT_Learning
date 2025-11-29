@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasAuthority("user")
                         .anyRequest().authenticated());
         http
-                .addFilterBefore(new JWTFilter(jwTutil), JWT.class);
+                .addFilterBefore(new JWTFilter(jwTutil), JWT.class); // JWT필터 -> 로그인 필터에 잡히기 전에, 그 앞에 위치하여 JWT토큰을 검사한다.
 
        http
                .addFilterAt(new JWT(authenticationManager(authenticationConfiguration),jwTutil), UsernamePasswordAuthenticationFilter.class);

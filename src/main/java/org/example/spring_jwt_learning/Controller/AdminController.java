@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public class AdminController { // 메니저전공 컨트롤러
 
-
+    @GetMapping("/admin")
+    public String adminp()
+    {
+        return "dmin Controller";
+    }
 
 }
